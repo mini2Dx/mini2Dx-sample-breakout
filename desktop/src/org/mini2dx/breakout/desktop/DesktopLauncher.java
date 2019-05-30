@@ -10,6 +10,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		DesktopMini2DxConfig config = new DesktopMini2DxConfig(BreakoutGame.GAME_IDENTIFIER);
 		config.vSyncEnabled = true;
+		config.width = BreakoutGame.gameWidth;
+		config.height = BreakoutGame.gameHeight;
 		new DesktopMini2DxGame(new BreakoutGame(), config);
 	}
 }
