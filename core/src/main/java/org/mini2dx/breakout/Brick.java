@@ -45,7 +45,7 @@ public class Brick {
 
     void update(float delta) {
         collisionBox.preUpdate();
-        if (CollisionHandler.getCollisionHandler().getTouchedBrick() == this)
+        if (CollisionHandler.getInstance().getTouchedBrick() == this)
             setAlive(false);
     }
 

@@ -6,11 +6,14 @@ import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
 
 class Paddle {
+    private final static int SHRINK_SCORE = (BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_PADDLE_SHRINK_EARLIER) == 0 ? 30 : 5;
+    private final static float SHRINK_SCALE = 0.8f;
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final float acceleration = 350;
+    private final static float PADDLE_ACCELERATION = 350;
     private CollisionBox collisionBox;
     private Sprite paddleSprite;
+    private boolean didShrink = false;
 
     public Paddle(){
         Texture paddleTexture = new Texture("paddleBlu.png");
@@ -30,12 +33,22 @@ class Paddle {
     public void update(float delta) {
         collisionBox.preUpdate();
 
-        InputHandler iH = InputHandler.getInput();
+        if (ScoreCounter.getInstance().getScore() == SHRINK_SCORE && !didShrink) {
+            paddleSprite.setScale(SHRINK_SCALE, SHRINK_SCALE);
+            collisionBox.setHeight(paddleSprite.getHeight() * SHRINK_SCALE);
+            collisionBox.setWidth(paddleSprite.getWidth() * SHRINK_SCALE);
+            didShrink = true;
+            if ((BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_PADDLE_SHRINK) != 0) {
+                System.out.println("Paddle shrink!");
+            }
+        }
+
+        InputHandler iH = InputHandler.getInstance();
         if (iH.isLeftPressed()) {
-            collisionBox.setX(Math.max(collisionBox.getX() - acceleration * delta, 0));
+            collisionBox.setX(Math.max(collisionBox.getX() - PADDLE_ACCELERATION * delta, 0));
         }
         if (iH.isRightPressed()){
-            float newX = collisionBox.getX() + acceleration * delta;
+            float newX = collisionBox.getX() + PADDLE_ACCELERATION * delta;
             collisionBox.setX(newX + collisionBox.getWidth() < BreakoutGame.gameWidth ? newX : BreakoutGame.gameWidth - collisionBox.getWidth());
         }
     }

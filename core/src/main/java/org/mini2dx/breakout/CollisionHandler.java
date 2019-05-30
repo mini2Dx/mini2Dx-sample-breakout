@@ -1,5 +1,10 @@
 package org.mini2dx.breakout;
 
+import com.badlogic.gdx.utils.Array;
+import org.mini2Dx.core.collisions.RegionQuadTree;
+import org.mini2Dx.core.engine.geom.CollisionBox;
+import org.mini2Dx.core.graphics.Graphics;
+
 public class CollisionHandler {
     private static CollisionHandler current;
 
@@ -18,7 +23,7 @@ public class CollisionHandler {
     private CollisionHandler(){
     }
 
-    public static CollisionHandler getCollisionHandler(){
+    public static CollisionHandler getInstance() {
         return current;
     }
 
