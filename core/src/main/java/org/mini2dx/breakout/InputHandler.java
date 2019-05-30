@@ -19,6 +19,13 @@ class InputHandler {
         current.right = Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D);
         current.restart = Gdx.input.isKeyPressed(Input.Keys.R) || Gdx.input.isKeyPressed(Input.Keys.ENTER);
         current.quit = Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.Q);
+
+        if ((BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_INPUT) != 0) {
+            System.out.print(current.left ? 'L' : 'l');
+            System.out.print(current.right ? 'R' : 'r');
+            System.out.print(current.restart ? 'A' : 'a'); //a stands for again because R is already in use.
+            System.out.println(current.quit ? 'Q' : 'q');
+        }
     }
 
     public static InputHandler getInput(){
