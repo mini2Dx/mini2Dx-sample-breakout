@@ -28,7 +28,7 @@ class InputHandler {
         }
     }
 
-    public static InputHandler getInput(){
+    public static InputHandler getInstance() {
         return current;
     }
 
