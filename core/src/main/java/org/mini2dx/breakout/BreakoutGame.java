@@ -2,28 +2,35 @@ package org.mini2dx.breakout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import org.mini2Dx.core.game.BasicGame;
+import org.mini2Dx.core.game.GameContainer;
 import org.mini2Dx.core.graphics.GlyphLayout;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.viewport.FitViewport;
 import org.mini2Dx.core.graphics.viewport.Viewport;
+import org.mini2Dx.core.screen.BasicGameScreen;
+import org.mini2Dx.core.screen.ScreenManager;
+import org.mini2Dx.core.screen.transition.FadeInTransition;
+import org.mini2Dx.core.screen.transition.FadeOutTransition;
 
-public class BreakoutGame extends BasicGame {
+public class BreakoutGame extends BasicGameScreen {
+    public static final int ID = 2;
+
     public static final int DEBUG_INPUT = 1, DEBUG_COLLISION_DRAW_COLLISION_BOXES = 2, DEBUG_COLLISION_PRINT = 4, DEBUG_BALL_SPEEDUP = 8,
             DEBUG_PADDLE_SHRINK = 16, DEBUG_PADDLE_SHRINK_EARLIER = 32;
     public static final int DEBUG_MODE = 0;
 
-    private final static String GAME_OVER_STRING = "GAME OVER!";
-    public static final int gridSizeX = 5, gridSizeY = 4;
-
-    public static final String GAME_IDENTIFIER = "org.mini2dx.breakout";
-    private final static String WIN_STRING = "You won!";
+    public static final int gridSizeX = 10, gridSizeY = 6;
     public static final float gameWidth = gridSizeX * Brick.width, gameHeight = gridSizeY * Brick.height * 3;
+
+    private static final String WIN_STRING = "You won!";
+    private static final String GAME_OVER_STRING = "GAME OVER!";
+
+    private static final Brick.Color[] brickColors = {Brick.Color.RED, Brick.Color.PURPLE, Brick.Color.BLUE, Brick.Color.GREEN, Brick.Color.YELLOW, Brick.Color.GREY};
+
     private Viewport viewport;
     private Background background;
     private Paddle paddle;
     private Ball ball;
-    private final Brick.Color[] boxColor = {Brick.Color.RED, Brick.Color.PURPLE, Brick.Color.BLUE, Brick.Color.GREEN, Brick.Color.YELLOW, Brick.Color.GREY};
     private Brick[][] bricks = new Brick[gridSizeX][gridSizeY];
     private ScoreCounter score;
     private LivesHandler lives;
@@ -31,9 +38,10 @@ public class BreakoutGame extends BasicGame {
     private GlyphLayout glyphLayout = new GlyphLayout();
 
     @Override
-    public void initialise() {
-        if (gridSizeY > boxColor.length)
-            throw new RuntimeException("There should be at least a color for each row of bricks");
+    public void initialise(GameContainer gameContainer) {
+        //noinspection ConstantConditions
+        assert gridSizeY > brickColors.length; //there should be at least a color for every row of bricks
+
         viewport = new FitViewport(gameWidth, gameHeight);
         background = new Background();
         initialiseGame();
@@ -44,7 +52,7 @@ public class BreakoutGame extends BasicGame {
         ball = new Ball();
         for (int j = 0; j < gridSizeY; j++)
             for (int i = 0; i < gridSizeX; i++)
-                bricks[i][j] = new Brick(boxColor[j], i * Brick.width, j * Brick.height);
+                bricks[i][j] = new Brick(brickColors[j], i * Brick.width, j * Brick.height);
 
         CollisionHandler.getInstance().setPaddle(paddle);
         CollisionHandler.getInstance().setBall(ball);
@@ -54,10 +62,11 @@ public class BreakoutGame extends BasicGame {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(GameContainer gameContainer, ScreenManager screenManager, float delta) {
         InputHandler.update();
         if (InputHandler.getInstance().isQuitPressed()) {
-            Gdx.app.exit();
+            screenManager.enterGameScreen(MainMenu.ID, new FadeOutTransition(),
+                    new FadeInTransition());
         } else if (InputHandler.getInstance().isRestartPressed()) {
             initialiseGame();
         }
@@ -76,11 +85,15 @@ public class BreakoutGame extends BasicGame {
                 if (!lives.isDead())
                     ball.returnToDefaultPosition();
             }
+        } else {
+            if (InputHandler.getInstance().isAnyKeyPressed())
+                screenManager.enterGameScreen(MainMenu.ID, new FadeOutTransition(),
+                        new FadeInTransition());
         }
     }
 
     @Override
-    public void interpolate(float alpha) {
+    public void interpolate(GameContainer gameContainer, float alpha) {
         paddle.interpolate(alpha);
         ball.interpolate(alpha);
         for (int i = 0; i < gridSizeX; i++)
@@ -89,7 +102,7 @@ public class BreakoutGame extends BasicGame {
     }
 
     @Override
-    public void render(Graphics g) {
+    public void render(GameContainer gameContainer, Graphics g) {
         viewport.apply(g);
         background.render(g);
         if (lives.isDead()) {
@@ -107,10 +120,15 @@ public class BreakoutGame extends BasicGame {
         lives.render(g);
     }
 
+    @Override
+    public int getId() {
+        return ID;
+    }
+
     public void drawCenterAlignedString(Graphics g, String s) {
         glyphLayout.setText((BitmapFont) g.getFont(), s);
-        int renderX = Math.round((getWidth() / 2f) - (glyphLayout.width / 2f));
-        int renderY = Math.round((getHeight() / 2f) - (glyphLayout.height / 2f));
+        int renderX = Math.round((gameWidth / 2f) - (glyphLayout.width / 2f));
+        int renderY = Math.round((gameHeight / 2f) - (glyphLayout.height / 2f));
         g.drawString(s, renderX, renderY);
     }
 }
