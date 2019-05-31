@@ -19,7 +19,7 @@ public class ScoreCounter {
 
     public void update() {
         if (CollisionHandler.getInstance().isBallTouchingAnyBrick()) {
-            score++;
+            score += 100 * LivesHandler.getInstance().getLives() / LivesHandler.INITIAL_LIVES_NUM;
             isScoreStringDirty = true;
         }
     }
@@ -29,7 +29,7 @@ public class ScoreCounter {
             scoreString = "Score: " + score;
             isScoreStringDirty = false;
         }
-        g.drawString(scoreString, 8, 16);
+        g.drawString(scoreString, 4, 8);
     }
 
     public int getScore() {

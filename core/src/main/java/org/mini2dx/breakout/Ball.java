@@ -7,8 +7,6 @@ import org.mini2Dx.core.graphics.Sprite;
 
 public class Ball {
     private final static String BALL_TEXTURE_IMAGE = "ballBlue.png";
-    public static final int SPEEDUP_SCORE = (BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_BALL_SPEEDUP_EARLIER) == 0 ? 45 : 5;
-    public static final float SPEEDUP_FACTOR = 1.4f;
 
     @SuppressWarnings("FieldCanBeLocal")
     private float acceleration = 180;
@@ -16,6 +14,10 @@ public class Ball {
     private Sprite ballSprite;
     private int verticalMovementSign = -1, horizontalMovementSign = 1;
     private boolean didSpeedUp = false;
+
+    private final float SPEEDUP_STEP = (Paddle.PADDLE_ACCELERATION - 50 - acceleration) / (BreakoutGame.gridSizeX * BreakoutGame.gridSizeY);
+    //50 is a random number I chose as the minimum gap between the paddle speed and the ball speed
+
     public Ball(){
         Texture ballTexture = new Texture(BALL_TEXTURE_IMAGE);
         ballSprite = new Sprite(ballTexture);
@@ -43,11 +45,10 @@ public class Ball {
             verticalMovementSign *= -1;
         collisionBox.setX(collisionBox.getX() + acceleration * delta * horizontalMovementSign);
         collisionBox.setY(collisionBox.getY() + acceleration * delta * verticalMovementSign);
-        if (ScoreCounter.getInstance().getScore() == SPEEDUP_SCORE && !didSpeedUp) {
-            didSpeedUp = true;
-            acceleration *= SPEEDUP_FACTOR;
+        if (CollisionHandler.getInstance().isBallTouchingAnyBrick()) {
+            acceleration += SPEEDUP_STEP;
             if ((BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_BALL_SPEEDUP) != 0)
-                System.out.println("Ball shrink!");
+                System.out.println(acceleration);
         }
     }
 
