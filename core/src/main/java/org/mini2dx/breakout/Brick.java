@@ -6,7 +6,7 @@ import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
 
-public class Box {
+public class Brick {
 
     public enum Color {
         BLUE("element_blue_rectangle.png"),
@@ -33,7 +33,7 @@ public class Box {
     private boolean isAlive = true;
     public static final float height = 32f, width = 64f;
 
-    Box(Color color, float xPosition, float yPosition){
+    Brick(Color color, float xPosition, float yPosition) {
         Texture boxTexture = new Texture(color.toString());
         boxSprite = new Sprite(boxTexture);
         collisionBox = new CollisionBox();
@@ -45,6 +45,8 @@ public class Box {
 
     void update(float delta) {
         collisionBox.preUpdate();
+        if (CollisionHandler.getCollisionHandler().getTouchedBrick() == this)
+            setAlive(false);
     }
 
     void interpolate(float alpha) {
@@ -52,8 +54,12 @@ public class Box {
     }
 
     void render(Graphics g) {
-        if (isAlive)
+        if (isAlive) {
             g.drawSprite(boxSprite, collisionBox.getRenderX(), collisionBox.getRenderY());
+            if ((BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_COLLISION_DRAW_COLLISION_BOXES) != 0) {
+                collisionBox.draw(g);
+            }
+        }
     }
 
 
@@ -63,5 +69,9 @@ public class Box {
 
     public void setAlive(boolean alive) {
         isAlive = alive;
+    }
+
+    public CollisionBox getCollisionBox() {
+        return collisionBox;
     }
 }

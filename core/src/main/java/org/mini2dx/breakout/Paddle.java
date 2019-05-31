@@ -8,7 +8,7 @@ import org.mini2Dx.core.graphics.Sprite;
 class Paddle {
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final float acceleration = 250;
+    private final float acceleration = 350;
     private CollisionBox collisionBox;
     private Sprite paddleSprite;
 
@@ -19,7 +19,11 @@ class Paddle {
         collisionBox.setWidth(paddleSprite.getWidth());
         collisionBox.setHeight(paddleSprite.getHeight());
 
-        collisionBox.setX(BreakoutGame.gameWidth / 2f - paddleSprite.getWidth() / 2);
+        returnToDefaultPosition();
+    }
+
+    public void returnToDefaultPosition(){
+        collisionBox.setCenterX(BreakoutGame.gameWidth / 2);
         collisionBox.setY(BreakoutGame.gameHeight - paddleSprite.getHeight());
     }
 
@@ -42,5 +46,11 @@ class Paddle {
 
     public void render(Graphics g) {
         g.drawSprite(paddleSprite, collisionBox.getRenderX(), collisionBox.getRenderY());
+        if ((BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_COLLISION_DRAW_COLLISION_BOXES) != 0)
+            collisionBox.draw(g);
+    }
+
+    public CollisionBox getCollisionBox() {
+        return collisionBox;
     }
 }
