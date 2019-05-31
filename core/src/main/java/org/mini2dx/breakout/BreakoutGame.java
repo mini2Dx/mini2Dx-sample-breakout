@@ -1,7 +1,9 @@
 package org.mini2dx.breakout;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import org.mini2Dx.core.game.BasicGame;
+import org.mini2Dx.core.graphics.GlyphLayout;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.viewport.FitViewport;
 import org.mini2Dx.core.graphics.viewport.Viewport;
@@ -10,6 +12,8 @@ public class BreakoutGame extends BasicGame {
     public static final int DEBUG_INPUT = 1, DEBUG_COLLISION_DRAW_COLLISION_BOXES = 2, DEBUG_COLLISION_PRINT = 4, DEBUG_BALL_SPEEDUP = 8,
             DEBUG_BALL_SPEEDUP_EARLIER = 16, DEBUG_PADDLE_SHRINK = 32, DEBUG_PADDLE_SHRINK_EARLIER = 64;
     public static final int DEBUG_MODE = 0;
+
+    private final static String GAME_OVER_STRING = "GAME OVER!";
 
     public static final String GAME_IDENTIFIER = "org.mini2dx.breakout";
     public static final int gridSizeX = 10, gridSizeY = 6;
@@ -21,6 +25,9 @@ public class BreakoutGame extends BasicGame {
     private final Brick.Color[] boxColor = {Brick.Color.RED, Brick.Color.PURPLE, Brick.Color.BLUE, Brick.Color.GREEN, Brick.Color.YELLOW, Brick.Color.GREY};
     private Brick[][] bricks = new Brick[gridSizeX][gridSizeY];
     private ScoreCounter score;
+    private LivesHandler lives;
+
+    private GlyphLayout glyphLayout = new GlyphLayout();
 
     @Override
     public void initialise() {
@@ -42,6 +49,7 @@ public class BreakoutGame extends BasicGame {
         CollisionHandler.getInstance().setBall(ball);
         CollisionHandler.getInstance().setBricks(bricks);
         score = new ScoreCounter();
+        lives = new LivesHandler();
     }
 
     @Override
@@ -52,15 +60,21 @@ public class BreakoutGame extends BasicGame {
         } else if (InputHandler.getInstance().isRestartPressed()) {
             initialiseGame();
         }
+        if (!lives.isDead()) {
+            paddle.update(delta);
+            CollisionHandler.update();
+            ball.update(delta);
+            for (int i = 0; i < gridSizeX; i++)
+                for (int j = 0; j < gridSizeY; j++)
+                    bricks[i][j].update(delta);
 
-        paddle.update(delta);
-        CollisionHandler.update();
-        ball.update(delta);
-        for (int i = 0; i < gridSizeX; i++)
-            for (int j = 0; j < gridSizeY; j++)
-                bricks[i][j].update(delta);
-
-        score.update();
+            score.update();
+            if (ball.getCollisionBox().getY() > gameHeight) {
+                lives.decrease();
+                if (!lives.isDead())
+                    ball.returnToDefaultPosition();
+            }
+        }
     }
 
     @Override
@@ -83,5 +97,12 @@ public class BreakoutGame extends BasicGame {
                 bricks[i][j].render(g);
 
         score.render(g);
+        lives.render(g);
+        if (lives.isDead()) {
+            glyphLayout.setText((BitmapFont) g.getFont(), GAME_OVER_STRING);
+            int renderX = Math.round((getWidth() / 2f) - (glyphLayout.width / 2f));
+            int renderY = Math.round((getHeight() / 2f) - (glyphLayout.height / 2f));
+            g.drawString(GAME_OVER_STRING, renderX, renderY);
+        }
     }
 }
