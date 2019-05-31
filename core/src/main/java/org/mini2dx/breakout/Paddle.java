@@ -11,12 +11,13 @@ class Paddle {
 
     @SuppressWarnings("FieldCanBeLocal")
     private final static float PADDLE_ACCELERATION = 350;
+    public static final String PADDLE_TEXTURE_IMAGE = "paddleBlu.png";
     private CollisionBox collisionBox;
     private Sprite paddleSprite;
     private boolean didShrink = false;
 
     public Paddle(){
-        Texture paddleTexture = new Texture("paddleBlu.png");
+        Texture paddleTexture = new Texture(PADDLE_TEXTURE_IMAGE);
         paddleSprite = new Sprite(paddleTexture);
         collisionBox = new CollisionBox();
         collisionBox.setWidth(paddleSprite.getWidth());
