@@ -15,6 +15,7 @@ public class CollisionHandler {
     private boolean isBallTouchingPaddle = false;
     private boolean isBallTouchingAnyBrick = false;
     private Brick touchedBrick = null;
+    private int aliveBricks;
 
     static {
         current = new CollisionHandler();
@@ -57,6 +58,7 @@ public class CollisionHandler {
 
     public void setBricks(Brick[][] bricks) {
         this.bricks = bricks;
+        aliveBricks = bricks.length * bricks[0].length;
     }
 
     public boolean isBallTouchingPaddle(){
@@ -69,5 +71,13 @@ public class CollisionHandler {
 
     public Brick getTouchedBrick() {
         return touchedBrick;
+    }
+
+    public int getAliveBricks() {
+        return aliveBricks;
+    }
+
+    public void killBrick() {
+        aliveBricks--;
     }
 }

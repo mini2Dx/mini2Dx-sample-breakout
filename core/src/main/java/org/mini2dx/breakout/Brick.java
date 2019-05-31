@@ -45,8 +45,10 @@ public class Brick {
 
     void update(float delta) {
         collisionBox.preUpdate();
-        if (CollisionHandler.getInstance().getTouchedBrick() == this)
+        if (CollisionHandler.getInstance().getTouchedBrick() == this) {
             setAlive(false);
+            CollisionHandler.getInstance().killBrick();
+        }
     }
 
     void interpolate(float alpha) {

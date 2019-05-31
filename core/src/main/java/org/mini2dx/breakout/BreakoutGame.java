@@ -10,13 +10,14 @@ import org.mini2Dx.core.graphics.viewport.Viewport;
 
 public class BreakoutGame extends BasicGame {
     public static final int DEBUG_INPUT = 1, DEBUG_COLLISION_DRAW_COLLISION_BOXES = 2, DEBUG_COLLISION_PRINT = 4, DEBUG_BALL_SPEEDUP = 8,
-            DEBUG_BALL_SPEEDUP_EARLIER = 16, DEBUG_PADDLE_SHRINK = 32, DEBUG_PADDLE_SHRINK_EARLIER = 64;
+            DEBUG_PADDLE_SHRINK = 16, DEBUG_PADDLE_SHRINK_EARLIER = 32;
     public static final int DEBUG_MODE = 0;
 
     private final static String GAME_OVER_STRING = "GAME OVER!";
+    public static final int gridSizeX = 5, gridSizeY = 4;
 
     public static final String GAME_IDENTIFIER = "org.mini2dx.breakout";
-    public static final int gridSizeX = 10, gridSizeY = 6;
+    private final static String WIN_STRING = "You won!";
     public static final float gameWidth = gridSizeX * Brick.width, gameHeight = gridSizeY * Brick.height * 3;
     private Viewport viewport;
     private Background background;
@@ -60,7 +61,8 @@ public class BreakoutGame extends BasicGame {
         } else if (InputHandler.getInstance().isRestartPressed()) {
             initialiseGame();
         }
-        if (!lives.isDead()) {
+
+        if (CollisionHandler.getInstance().getAliveBricks() != 0 && !lives.isDead()) {
             paddle.update(delta);
             CollisionHandler.update();
             ball.update(delta);
@@ -90,19 +92,25 @@ public class BreakoutGame extends BasicGame {
     public void render(Graphics g) {
         viewport.apply(g);
         background.render(g);
-        paddle.render(g);
-        ball.render(g);
-        for (int i = 0; i < gridSizeX; i++)
-            for (int j = 0; j < gridSizeY; j++)
-                bricks[i][j].render(g);
-
+        if (lives.isDead()) {
+            drawCenterAlignedString(g, GAME_OVER_STRING);
+        } else if (CollisionHandler.getInstance().getAliveBricks() == 0) {
+            drawCenterAlignedString(g, WIN_STRING);
+        } else {
+            paddle.render(g);
+            ball.render(g);
+            for (int i = 0; i < gridSizeX; i++)
+                for (int j = 0; j < gridSizeY; j++)
+                    bricks[i][j].render(g);
+        }
         score.render(g);
         lives.render(g);
-        if (lives.isDead()) {
-            glyphLayout.setText((BitmapFont) g.getFont(), GAME_OVER_STRING);
-            int renderX = Math.round((getWidth() / 2f) - (glyphLayout.width / 2f));
-            int renderY = Math.round((getHeight() / 2f) - (glyphLayout.height / 2f));
-            g.drawString(GAME_OVER_STRING, renderX, renderY);
-        }
+    }
+
+    public void drawCenterAlignedString(Graphics g, String s) {
+        glyphLayout.setText((BitmapFont) g.getFont(), s);
+        int renderX = Math.round((getWidth() / 2f) - (glyphLayout.width / 2f));
+        int renderY = Math.round((getHeight() / 2f) - (glyphLayout.height / 2f));
+        g.drawString(s, renderX, renderY);
     }
 }

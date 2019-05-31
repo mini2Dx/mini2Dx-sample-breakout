@@ -10,7 +10,7 @@ class Paddle {
     private final static float SHRINK_SCALE = 0.8f;
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final static float PADDLE_ACCELERATION = 350;
+    public final static float PADDLE_ACCELERATION = 350;
     public static final String PADDLE_TEXTURE_IMAGE = "paddleBlu.png";
     private CollisionBox collisionBox;
     private Sprite paddleSprite;
