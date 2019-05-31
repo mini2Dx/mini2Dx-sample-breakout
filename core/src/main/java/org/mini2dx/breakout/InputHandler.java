@@ -3,7 +3,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 class InputHandler {
-    private boolean left, right, restart, quit;
+    private boolean left, right, restart, quit, any;
     private static InputHandler current;
 
     static{
@@ -19,7 +19,7 @@ class InputHandler {
         current.right = Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D);
         current.restart = Gdx.input.isKeyPressed(Input.Keys.R) || Gdx.input.isKeyPressed(Input.Keys.ENTER);
         current.quit = Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.Q);
-
+        current.any = Gdx.input.isKeyPressed(Input.Keys.ANY_KEY);
         if ((BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_INPUT) != 0) {
             System.out.print(current.left ? 'L' : 'l');
             System.out.print(current.right ? 'R' : 'r');
@@ -46,5 +46,9 @@ class InputHandler {
 
     public boolean isQuitPressed() {
         return quit;
+    }
+
+    public boolean isAnyKeyPressed() {
+        return any;
     }
 }
