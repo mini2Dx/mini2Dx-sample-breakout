@@ -54,15 +54,19 @@ public class BreakoutGame extends BasicGameScreen {
         didSaveScore = false;
         paddle = new Paddle();
         ball = new Ball();
+        initialiseBricks();
+        CollisionHandler.getInstance().setPaddle(paddle);
+        CollisionHandler.getInstance().setBall(ball);
+        score = new ScoreCounter();
+        lives = new LivesHandler();
+    }
+
+    private void initialiseBricks() {
         for (int j = 0; j < gridSizeY; j++)
             for (int i = 0; i < gridSizeX; i++)
                 bricks[i][j] = new Brick(brickColors[j], i * Brick.width, j * Brick.height);
 
-        CollisionHandler.getInstance().setPaddle(paddle);
-        CollisionHandler.getInstance().setBall(ball);
         CollisionHandler.getInstance().setBricks(bricks);
-        score = new ScoreCounter();
-        lives = new LivesHandler();
     }
 
     @Override
@@ -74,14 +78,21 @@ public class BreakoutGame extends BasicGameScreen {
         if (InputHandler.getInstance().isQuitPressed()) {
             screenManager.enterGameScreen(MainMenu.ID, new NullTransition(),
                     new FadeInTransition());
+            LeaderboardHandler.getInstance().addScore(ScoreCounter.getInstance().getScore());
             isGameRestarted = true;
         } else if (InputHandler.getInstance().isRestartPressed()) {
             screenManager.enterGameScreen(BreakoutGame.ID, new NullTransition(),
                     new FadeInTransition());
+            LeaderboardHandler.getInstance().addScore(ScoreCounter.getInstance().getScore());
             isGameRestarted = true;
         }
 
-        if (CollisionHandler.getInstance().getAliveBricks() != 0 && !lives.isDead()) {
+        if (CollisionHandler.getInstance().getAliveBricks() == 0) {
+            initialiseBricks();
+            ball.returnToDefaultPosition();
+        }
+
+        if (!lives.isDead()) {
             paddle.update(delta);
             CollisionHandler.update();
             ball.update(delta);
