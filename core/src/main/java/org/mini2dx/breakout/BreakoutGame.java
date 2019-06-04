@@ -1,6 +1,5 @@
 package org.mini2dx.breakout;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import org.mini2Dx.core.game.GameContainer;
 import org.mini2Dx.core.graphics.GlyphLayout;
@@ -11,6 +10,7 @@ import org.mini2Dx.core.screen.BasicGameScreen;
 import org.mini2Dx.core.screen.ScreenManager;
 import org.mini2Dx.core.screen.transition.FadeInTransition;
 import org.mini2Dx.core.screen.transition.FadeOutTransition;
+import org.mini2Dx.core.screen.transition.NullTransition;
 
 public class BreakoutGame extends BasicGameScreen {
     public static final int ID = 2;
@@ -31,11 +31,13 @@ public class BreakoutGame extends BasicGameScreen {
     private Background background;
     private Paddle paddle;
     private Ball ball;
-    private Brick[][] bricks = new Brick[gridSizeX][gridSizeY];
+    private final Brick[][] bricks = new Brick[gridSizeX][gridSizeY];
     private ScoreCounter score;
     private LivesHandler lives;
+    private boolean didSaveScore;
+    private boolean isGameRestarted;
 
-    private GlyphLayout glyphLayout = new GlyphLayout();
+    private final GlyphLayout glyphLayout = new GlyphLayout();
 
     @Override
     public void initialise(GameContainer gameContainer) {
@@ -48,6 +50,8 @@ public class BreakoutGame extends BasicGameScreen {
     }
 
     public void initialiseGame() {
+        isGameRestarted = false;
+        didSaveScore = false;
         paddle = new Paddle();
         ball = new Ball();
         for (int j = 0; j < gridSizeY; j++)
@@ -63,12 +67,18 @@ public class BreakoutGame extends BasicGameScreen {
 
     @Override
     public void update(GameContainer gameContainer, ScreenManager screenManager, float delta) {
+        if (isGameRestarted)
+            initialiseGame();
+
         InputHandler.update();
         if (InputHandler.getInstance().isQuitPressed()) {
-            screenManager.enterGameScreen(MainMenu.ID, new FadeOutTransition(),
+            screenManager.enterGameScreen(MainMenu.ID, new NullTransition(),
                     new FadeInTransition());
+            isGameRestarted = true;
         } else if (InputHandler.getInstance().isRestartPressed()) {
-            initialiseGame();
+            screenManager.enterGameScreen(BreakoutGame.ID, new NullTransition(),
+                    new FadeInTransition());
+            isGameRestarted = true;
         }
 
         if (CollisionHandler.getInstance().getAliveBricks() != 0 && !lives.isDead()) {
@@ -77,7 +87,7 @@ public class BreakoutGame extends BasicGameScreen {
             ball.update(delta);
             for (int i = 0; i < gridSizeX; i++)
                 for (int j = 0; j < gridSizeY; j++)
-                    bricks[i][j].update(delta);
+                    bricks[i][j].update();
 
             score.update();
             if (ball.getCollisionBox().getY() > gameHeight) {
@@ -86,9 +96,16 @@ public class BreakoutGame extends BasicGameScreen {
                     ball.returnToDefaultPosition();
             }
         } else {
-            if (InputHandler.getInstance().isAnyKeyPressed())
+            if (!didSaveScore) {
+                didSaveScore = true;
+                LeaderboardHandler.getInstance().addScore(ScoreCounter.getInstance().getScore());
+            }
+
+            if (InputHandler.getInstance().isAnyKeyPressed()) {
                 screenManager.enterGameScreen(MainMenu.ID, new FadeOutTransition(),
                         new FadeInTransition());
+                isGameRestarted = true;
+            }
         }
     }
 

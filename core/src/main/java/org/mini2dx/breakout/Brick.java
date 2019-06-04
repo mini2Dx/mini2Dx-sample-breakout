@@ -28,8 +28,8 @@ public class Brick {
         }
     }
 
-    private CollisionBox collisionBox;
-    private Sprite boxSprite;
+    private final CollisionBox collisionBox;
+    private final Sprite boxSprite;
     private boolean isAlive = true;
     public static final float height = 32f, width = 64f;
 
@@ -43,7 +43,7 @@ public class Brick {
         collisionBox.setY(yPosition);
     }
 
-    void update(float delta) {
+    void update() {
         collisionBox.preUpdate();
         if (CollisionHandler.getInstance().getTouchedBrick() == this) {
             setAlive(false);
