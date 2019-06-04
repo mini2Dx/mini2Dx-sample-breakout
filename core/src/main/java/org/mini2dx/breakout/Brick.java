@@ -9,12 +9,12 @@ import org.mini2Dx.core.graphics.Sprite;
 public class Brick {
 
     public enum Color {
-        BLUE("element_blue_rectangle.png"),
-        GREEN("element_green_rectangle.png"),
-        GREY("element_grey_rectangle.png"),
-        PURPLE("element_purple_rectangle.png"),
-        RED("element_red_rectangle.png"),
-        YELLOW("element_yellow_rectangle.png");
+        BLUE("bricks/blue.png"),
+        GREEN("bricks/green.png"),
+        GREY("bricks/grey.png"),
+        PURPLE("bricks/purple.png"),
+        RED("bricks/red.png"),
+        YELLOW("bricks/yellow.png");
 
         private final String color;
 

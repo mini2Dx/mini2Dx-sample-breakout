@@ -6,7 +6,7 @@ import org.mini2Dx.core.graphics.Graphics;
 public class Background {
     private final static int BACKGROUND_SCALE = 8;
 
-    private final Texture backgroundTexture = new Texture("bg.png");
+    private final Texture backgroundTexture = new Texture("misc/background.png");
 
     public void render(Graphics g) {
         for (int x = 0; x < BreakoutGame.gameWidth; x += backgroundTexture.getWidth() / BACKGROUND_SCALE)

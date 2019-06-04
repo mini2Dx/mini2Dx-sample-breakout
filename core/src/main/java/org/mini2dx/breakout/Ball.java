@@ -6,7 +6,7 @@ import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
 
 public class Ball {
-    private final static String BALL_TEXTURE_IMAGE = "ballBlue.png";
+    private final static String BALL_TEXTURE_IMAGE = "misc/ball.png";
 
     private float acceleration = 180;
     private final CollisionBox collisionBox;
