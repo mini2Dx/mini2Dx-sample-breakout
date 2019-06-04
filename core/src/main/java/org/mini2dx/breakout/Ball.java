@@ -8,12 +8,10 @@ import org.mini2Dx.core.graphics.Sprite;
 public class Ball {
     private final static String BALL_TEXTURE_IMAGE = "ballBlue.png";
 
-    @SuppressWarnings("FieldCanBeLocal")
     private float acceleration = 180;
-    private CollisionBox collisionBox;
-    private Sprite ballSprite;
+    private final CollisionBox collisionBox;
+    private final Sprite ballSprite;
     private int verticalMovementSign = -1, horizontalMovementSign = 1;
-    private boolean didSpeedUp = false;
 
     private final float SPEEDUP_STEP = (Paddle.PADDLE_ACCELERATION - 50 - acceleration) / (BreakoutGame.gridSizeX * BreakoutGame.gridSizeY);
     //50 is a random number I chose as the minimum gap between the paddle speed and the ball speed

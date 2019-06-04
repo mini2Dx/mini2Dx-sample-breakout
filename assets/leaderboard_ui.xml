@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<data id="Leaderboard">
+    <visibility>VISIBLE</visibility>
+    <children length="1">
+        <value class="org.mini2Dx.ui.element.FlexRow" id="mainColumn">
+            <visibility>VISIBLE</visibility>
+            <children length="3">
+                <value class="org.mini2Dx.ui.element.Label" id="scoreLabel">
+                    <visibility>VISIBLE</visibility>
+                    <text>Score</text>
+                    <horizontalAlignment>CENTER</horizontalAlignment>
+                </value>
+
+                <value class="org.mini2Dx.ui.element.Container" id="scoreContainer">
+                    <flexLayout>flex-column:xs-12c</flexLayout>
+                    <visibility>VISIBLE</visibility>
+                </value>
+
+                <value class="org.mini2Dx.ui.element.TextButton" id="mainMenuButton">
+                    <visibility>VISIBLE</visibility>
+                    <flexLayout>flex-column:xs-12c</flexLayout>
+                    <children length="1">
+                        <value class="org.mini2Dx.ui.element.Label">
+                            <visibility>VISIBLE</visibility>
+                            <text>Main Menu</text>
+                            <horizontalAlignment>CENTER</horizontalAlignment>
+                        </value>
+                    </children>
+                </value>
+            </children>
+        </value>
+    </children>
+</data>

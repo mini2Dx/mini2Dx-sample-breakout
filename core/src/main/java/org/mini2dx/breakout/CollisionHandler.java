@@ -1,12 +1,7 @@
 package org.mini2dx.breakout;
 
-import com.badlogic.gdx.utils.Array;
-import org.mini2Dx.core.collisions.RegionQuadTree;
-import org.mini2Dx.core.engine.geom.CollisionBox;
-import org.mini2Dx.core.graphics.Graphics;
-
 public class CollisionHandler {
-    private static CollisionHandler current;
+    private static final CollisionHandler current;
 
     private Paddle paddle;
     private Ball ball;

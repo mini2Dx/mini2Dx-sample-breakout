@@ -4,7 +4,7 @@ import com.badlogic.gdx.Input;
 
 class InputHandler {
     private boolean left, right, restart, quit, any;
-    private static InputHandler current;
+    private static final InputHandler current;
 
     static{
         current = new InputHandler();

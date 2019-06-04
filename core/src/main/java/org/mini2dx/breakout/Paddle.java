@@ -9,11 +9,10 @@ class Paddle {
     private final static int SHRINK_SCORE = (BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_PADDLE_SHRINK_EARLIER) == 0 ? 30 : 5;
     private final static float SHRINK_SCALE = 0.8f;
 
-    @SuppressWarnings("FieldCanBeLocal")
     public final static float PADDLE_ACCELERATION = 350;
     public static final String PADDLE_TEXTURE_IMAGE = "paddleBlu.png";
-    private CollisionBox collisionBox;
-    private Sprite paddleSprite;
+    private final CollisionBox collisionBox;
+    private final Sprite paddleSprite;
     private boolean didShrink = false;
 
     public Paddle(){

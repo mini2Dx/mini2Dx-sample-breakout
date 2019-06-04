@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<data id="BreakoutMenu">
+<data id="MainMenu">
     <visibility>VISIBLE</visibility>
     <children length="1">
         <value class="org.mini2Dx.ui.element.FlexRow" id="mainColumn">
             <visibility>VISIBLE</visibility>
-            <children length="2">
+            <children length="3">
                 <value class="org.mini2Dx.ui.element.TextButton" id="newGameButton">
                     <visibility>VISIBLE</visibility>
                     <flexLayout>flex-column:xs-12c</flexLayout>
@@ -12,6 +12,17 @@
                         <value class="org.mini2Dx.ui.element.Label">
                             <visibility>VISIBLE</visibility>
                             <text>Play</text>
+                            <horizontalAlignment>CENTER</horizontalAlignment>
+                        </value>
+                    </children>
+                </value>
+                <value class="org.mini2Dx.ui.element.TextButton" id="leaderboardButton">
+                    <visibility>VISIBLE</visibility>
+                    <flexLayout>flex-column:xs-12c</flexLayout>
+                    <children length="1">
+                        <value class="org.mini2Dx.ui.element.Label">
+                            <visibility>VISIBLE</visibility>
+                            <text>Leaderboard</text>
                             <horizontalAlignment>CENTER</horizontalAlignment>
                         </value>
                     </children>
