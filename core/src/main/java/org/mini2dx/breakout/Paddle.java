@@ -10,7 +10,7 @@ class Paddle {
     private final static float SHRINK_SCALE = 0.8f;
 
     public final static float PADDLE_ACCELERATION = 350;
-    public static final String PADDLE_TEXTURE_IMAGE = "paddleBlu.png";
+    public static final String PADDLE_TEXTURE_IMAGE = "misc/paddle.png";
     private final CollisionBox collisionBox;
     private final Sprite paddleSprite;
     private boolean didShrink = false;

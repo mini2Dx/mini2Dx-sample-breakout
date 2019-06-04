@@ -25,8 +25,8 @@ import java.util.Objects;
 
 public class MainMenu extends BasicGameScreen {
     public final static int ID = 1;
-    public static final String UI_MAINMENU_LAYOUT_XML = "mainmenu_ui.xml";
-    public static final String UI_LEADERBOARD_LAYOUT_XML = "leaderboard_ui.xml";
+    public static final String UI_MAINMENU_LAYOUT_XML = "ui/mainmenu_ui.xml";
+    public static final String UI_LEADERBOARD_LAYOUT_XML = "ui/leaderboard_ui.xml";
 
     private AssetManager assetManager;
     private UiContainer uiContainer;
