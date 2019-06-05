@@ -21,8 +21,6 @@ import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
 
 class Paddle {
-    private final static int SHRINK_SCORE = (BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_PADDLE_SHRINK_EARLIER) == 0 ? 30 : 5;
-    private final static float SHRINK_SCALE = 0.8f;
 
     public final static float PADDLE_ACCELERATION = 350;
     public static final String PADDLE_TEXTURE_IMAGE = "misc/paddle.png";
@@ -47,16 +45,6 @@ class Paddle {
 
     public void update(float delta) {
         collisionBox.preUpdate();
-
-        if (ScoreCounter.getInstance().getScore() == SHRINK_SCORE && !didShrink) {
-            paddleSprite.setScale(SHRINK_SCALE, SHRINK_SCALE);
-            collisionBox.setHeight(paddleSprite.getHeight() * SHRINK_SCALE);
-            collisionBox.setWidth(paddleSprite.getWidth() * SHRINK_SCALE);
-            didShrink = true;
-            if ((BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_PADDLE_SHRINK) != 0) {
-                System.out.println("Paddle shrink!");
-            }
-        }
 
         InputHandler iH = InputHandler.getInstance();
         if (iH.isLeftPressed()) {
