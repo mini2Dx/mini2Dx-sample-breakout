@@ -1,5 +1,3 @@
-package org.mini2dx.breakout;
-
 /*******************************************************************************
  * Copyright 2019 Viridian Software Limited
  *
@@ -15,6 +13,9 @@ package org.mini2dx.breakout;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+
+package org.mini2dx.breakout;
+
 import org.mini2Dx.core.Mdx;
 import org.mini2Dx.core.playerdata.PlayerDataException;
 import org.mini2Dx.core.serialization.annotation.Field;
@@ -30,6 +31,9 @@ public class LeaderboardHandler {
     private final static String serializedFileName = "scoreboard.json";
     private static final LeaderboardHandler current;
 
+    @Field
+    private final LinkedList<Score> scores = new LinkedList<>();
+
     static {
         LeaderboardHandler temp_current; // fixes 'variable current might already have been assigned'
         try {
@@ -42,21 +46,23 @@ public class LeaderboardHandler {
         current = temp_current;
     }
 
-    @Field
-    private final LinkedList<Integer> scores = new LinkedList<>();
-
     public static LeaderboardHandler getInstance() {
         return current;
     }
 
-    public void addScore(int newScore) {
+    public boolean willBeInLeaderboard(int score) {
+        return scores.size() < BEST_SCORES_TO_SAVE || score > scores.getLast().score;
+    }
+
+    public void addScore(Score newScore) {
         scores.add(newScore);
 
         scores.sort(Comparator.reverseOrder());
 
         while (scores.size() > BEST_SCORES_TO_SAVE) {
-            scores.pop();
+            scores.removeLast();
         }
+
         writeToJson();
     }
 
@@ -69,7 +75,8 @@ public class LeaderboardHandler {
         }
     }
 
-    public List<Integer> getScores() {
+    public List<Score> getScores() {
         return scores;
     }
 }
+

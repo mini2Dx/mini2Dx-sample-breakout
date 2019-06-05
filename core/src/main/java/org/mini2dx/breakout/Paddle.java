@@ -1,6 +1,3 @@
-package org.mini2dx.breakout;
-
-import com.badlogic.gdx.graphics.Texture;
 /*******************************************************************************
  * Copyright 2019 Viridian Software Limited
  *
@@ -16,6 +13,9 @@ import com.badlogic.gdx.graphics.Texture;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+package org.mini2dx.breakout;
+
+import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
@@ -26,7 +26,6 @@ class Paddle {
     public static final String PADDLE_TEXTURE_IMAGE = "misc/paddle.png";
     private final CollisionBox collisionBox;
     private final Sprite paddleSprite;
-    private boolean didShrink = false;
 
     public Paddle(){
         Texture paddleTexture = new Texture(PADDLE_TEXTURE_IMAGE);

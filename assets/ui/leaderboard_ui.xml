@@ -4,13 +4,7 @@
     <children length="1">
         <value class="org.mini2Dx.ui.element.FlexRow" id="mainColumn">
             <visibility>VISIBLE</visibility>
-            <children length="3">
-                <value class="org.mini2Dx.ui.element.Label" id="scoreLabel">
-                    <visibility>VISIBLE</visibility>
-                    <text>Score</text>
-                    <horizontalAlignment>CENTER</horizontalAlignment>
-                </value>
-
+            <children length="2">
                 <value class="org.mini2Dx.ui.element.Container" id="scoreContainer">
                     <flexLayout>flex-column:xs-12c</flexLayout>
                     <visibility>VISIBLE</visibility>

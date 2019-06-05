@@ -59,7 +59,6 @@ public class MainMenu extends BasicGameScreen {
 
         viewport = new FitViewport(BreakoutGame.gameWidth, BreakoutGame.gameHeight);
         uiContainer = new UiContainer(gc, assetManager);
-        Gdx.input.setInputProcessor(uiContainer);
         Container mainMenuContainer = null;
         try {
             mainMenuContainer = Mdx.xml.fromXml(Gdx.files.internal(UI_MAINMENU_LAYOUT_XML).reader(), Container.class);
@@ -110,15 +109,41 @@ public class MainMenu extends BasicGameScreen {
             @Override
             public void onActionEnd(ActionEvent event) {
                 scoreContainer.removeAll();
-                List<Integer> scores = LeaderboardHandler.getInstance().getScores();
-                for (Integer currentScore : scores) {
+                List<Score> scores = LeaderboardHandler.getInstance().getScores();
+                int i = 0;
+                for (Score currentScore : scores) {
+                    Div currentScoreRow = new Div();
+                    currentScoreRow.setFlexLayout("flex-column:xs-12c lg-12c xl-12c");
+                    currentScoreRow.setVisibility(Visibility.VISIBLE);
+
+                    Div currentScorePositionDiv = new Div();
+                    currentScorePositionDiv.setVisibility(Visibility.VISIBLE);
+                    currentScorePositionDiv.setFlexLayout("flex-column:xs-1c lg-1c xl-1c");
+                    Label currentScorePosition = new Label();
+                    currentScorePosition.setText(Integer.toString(++i));
+                    currentScorePosition.setVisibility(Visibility.VISIBLE);
+                    currentScorePositionDiv.add(currentScorePosition);
+                    currentScoreRow.add(currentScorePositionDiv);
+
+                    Div currentScoreNameDiv = new Div();
+                    currentScoreNameDiv.setVisibility(Visibility.VISIBLE);
+                    currentScoreNameDiv.setFlexLayout("flex-column:xs-8c lg-8c xl-8c");
+                    Label currentScoreName = new Label();
+                    currentScoreName.setText(currentScore.name);
+                    currentScoreName.setVisibility(Visibility.VISIBLE);
+                    currentScoreNameDiv.add(currentScoreName);
+                    currentScoreRow.add(currentScoreNameDiv);
+
                     Label currentScoreLabel = new Label();
-                    currentScoreLabel.setText(currentScore.toString());
+                    currentScoreLabel.setText(Integer.toString(currentScore.score));
                     currentScoreLabel.setVisibility(Visibility.VISIBLE);
-                    Div currentScoreDiv = new FlexRow();
+                    Div currentScoreDiv = new Div();
                     currentScoreDiv.setVisibility(Visibility.VISIBLE);
+                    currentScoreDiv.setFlexLayout("flex-column:xs-3c lg-3c xl-3c");
                     currentScoreDiv.add(currentScoreLabel);
-                    scoreContainer.add(currentScoreDiv);
+                    currentScoreRow.add(currentScoreDiv);
+
+                    scoreContainer.add(currentScoreRow);
                 }
                 uiContainer.get(0).setVisibility(Visibility.NO_RENDER);
                 uiContainer.add(leaderboardContainer);
@@ -167,6 +192,7 @@ public class MainMenu extends BasicGameScreen {
             screenManager.enterGameScreen(screenToLoad, new NullTransition(), new NullTransition());
             screenToLoad = 0;
         }
+        Gdx.input.setInputProcessor(uiContainer);
     }
 
     @Override

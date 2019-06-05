@@ -1,8 +1,3 @@
-package org.mini2dx.breakout;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 /*******************************************************************************
  * Copyright 2019 Viridian Software Limited
  *
@@ -18,6 +13,11 @@ import com.badlogic.gdx.graphics.Texture;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+package org.mini2dx.breakout;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import org.mini2Dx.core.engine.geom.CollisionBox;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
@@ -31,8 +31,11 @@ public class Ball {
     private int verticalMovementSign = -1, horizontalMovementSign = 1;
 
     private final static Sound wallCollisionSound = Gdx.audio.newSound(Gdx.files.internal("audio/wall.ogg"));
+    private final static float wallCollisionSoundVolume = 0.5f;
     private final static Sound brickCollisionSound = Gdx.audio.newSound(Gdx.files.internal("audio/brick.ogg"));
+    private final static float brickCollisionSoundVolume = 0.5f;
     private final static Sound paddleCollisionSound = Gdx.audio.newSound(Gdx.files.internal("audio/paddle.ogg"));
+    private final static float paddleCollisionSoundVolume = 0.5f;
 
     private final float SPEEDUP_STEP = (Paddle.PADDLE_ACCELERATION - 50 - acceleration) / (BreakoutGame.gridSizeX * BreakoutGame.gridSizeY);
     //50 is a random number I chose as the minimum gap between the paddle speed and the ball speed
@@ -54,21 +57,21 @@ public class Ball {
 
     public void update(float delta) {
         collisionBox.preUpdate();
-        if (collisionBox.getX() + collisionBox.getWidth() > BreakoutGame.gameWidth || collisionBox.getX() <= 0) { //wall collision
+        if (collisionBox.getX() + collisionBox.getWidth() > BreakoutGame.gameWidth || collisionBox.getX() <= 0) { //lateral wall collision
             horizontalMovementSign *= -1;
-            wallCollisionSound.play();
+            wallCollisionSound.play(wallCollisionSoundVolume);
         }
         if (CollisionHandler.getInstance().isBallTouchingPaddle()) {
             verticalMovementSign = -1;
-            paddleCollisionSound.play();
+            paddleCollisionSound.play(paddleCollisionSoundVolume);
         }
         if (CollisionHandler.getInstance().isBallTouchingAnyBrick()) {
             verticalMovementSign *= -1;
-            brickCollisionSound.play();
+            brickCollisionSound.play(brickCollisionSoundVolume);
         }
-        if (collisionBox.getY() <= 0) { //wall collision
-            verticalMovementSign *= -1;
-            wallCollisionSound.play();
+        if (collisionBox.getY() <= 0) { //top wall collision
+            verticalMovementSign = 1;
+            wallCollisionSound.play(wallCollisionSoundVolume);
         }
         collisionBox.setX(collisionBox.getX() + acceleration * delta * horizontalMovementSign);
         collisionBox.setY(collisionBox.getY() + acceleration * delta * verticalMovementSign);
