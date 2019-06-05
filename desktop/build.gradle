@@ -4,7 +4,7 @@ sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 mainClassName = "org.mini2dx.breakout.desktop.DesktopLauncher"
-project.ext.assetsDir = new File("$projectDir/../assets");
+project.ext.assetsDir = new File("$projectDir/../assets")
 
 sourceSets.main.resources.srcDirs = [project.ext.assetsDir.getAbsolutePath()]
 
@@ -26,7 +26,7 @@ eclipse {
 task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
   doLast {
     def classpath = new XmlParser().parse(file(".classpath"))
-    new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
+    new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ])
     def writer = new FileWriter(file(".classpath"))
     def printer = new XmlNodePrinter(new PrintWriter(writer))
     printer.setPreserveWhitespace(true)

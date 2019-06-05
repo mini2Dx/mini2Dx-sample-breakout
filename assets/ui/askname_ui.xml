@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<data id="AskName">
+    <visibility>VISIBLE</visibility>
+    <children length="1">
+        <value class="org.mini2Dx.ui.element.FlexRow" id="mainColumn">
+            <visibility>VISIBLE</visibility>
+            <children length="4">
+                <value class="org.mini2Dx.ui.element.FlexRow">
+                    <visibility>VISIBLE</visibility>
+                    <children length="1">
+                        <value class="org.mini2Dx.ui.element.Label">
+                            <visibility>VISIBLE</visibility>
+                            <text>You made it to the leaderboard!</text>
+                            <horizontalAlignment>LEFT</horizontalAlignment>
+                        </value>
+                    </children>
+                </value>
+
+                <value class="org.mini2Dx.ui.element.FlexRow">
+                    <visibility>VISIBLE</visibility>
+                    <children length="1">
+                        <value class="org.mini2Dx.ui.element.Label">
+                            <visibility>VISIBLE</visibility>
+                            <text>What's your name?</text>
+                            <horizontalAlignment>LEFT</horizontalAlignment>
+                        </value>
+                    </children>
+                </value>
+
+                <value class="org.mini2Dx.ui.element.TextBox" id="playerNameText">
+                    <visibility>VISIBLE</visibility>
+                    <enabled>true</enabled>
+                    <flexLayout>flex-column:xs-12c</flexLayout>
+                </value>
+
+                <value class="org.mini2Dx.ui.element.TextButton" id="confirmButton">
+                    <visibility>VISIBLE</visibility>
+                    <flexLayout>flex-column:xs-12c</flexLayout>
+                    <children length="1">
+                        <value class="org.mini2Dx.ui.element.Label">
+                            <visibility>VISIBLE</visibility>
+                            <text>OK</text>
+                            <horizontalAlignment>CENTER</horizontalAlignment>
+                        </value>
+                    </children>
+                </value>
+            </children>
+        </value>
+    </children>
+</data>
