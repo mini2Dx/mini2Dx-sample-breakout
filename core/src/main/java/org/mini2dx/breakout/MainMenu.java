@@ -9,6 +9,8 @@ import org.mini2Dx.core.Mdx;
 import org.mini2Dx.core.assets.FallbackFileHandleResolver;
 import org.mini2Dx.core.game.GameContainer;
 import org.mini2Dx.core.graphics.Graphics;
+import org.mini2Dx.core.graphics.viewport.FitViewport;
+import org.mini2Dx.core.graphics.viewport.Viewport;
 import org.mini2Dx.core.screen.BasicGameScreen;
 import org.mini2Dx.core.screen.ScreenManager;
 import org.mini2Dx.core.screen.transition.NullTransition;
@@ -30,6 +32,7 @@ public class MainMenu extends BasicGameScreen {
 
     private AssetManager assetManager;
     private UiContainer uiContainer;
+    private Viewport viewport;
     private int screenToLoad = 0;
 
     @Override
@@ -39,6 +42,7 @@ public class MainMenu extends BasicGameScreen {
         assetManager.setLoader(UiTheme.class, new UiThemeLoader(fileHandleResolver));
         assetManager.load(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class);
 
+        viewport = new FitViewport(BreakoutGame.gameWidth, BreakoutGame.gameHeight);
         uiContainer = new UiContainer(gc, assetManager);
         Gdx.input.setInputProcessor(uiContainer);
         Container mainMenuContainer = null;
@@ -157,6 +161,7 @@ public class MainMenu extends BasicGameScreen {
 
     @Override
     public void render(GameContainer gc, Graphics g) {
+        viewport.apply(g);
         uiContainer.render(g);
     }
 
