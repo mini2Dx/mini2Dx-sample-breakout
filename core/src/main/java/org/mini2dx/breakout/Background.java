@@ -15,13 +15,14 @@
  ******************************************************************************/
 package org.mini2dx.breakout;
 
-import com.badlogic.gdx.graphics.Texture;
-import org.mini2Dx.core.graphics.Graphics;
+import org.mini2Dx.core.Graphics;
+import org.mini2Dx.core.Mdx;
+import org.mini2Dx.core.graphics.Texture;
 
 public class Background {
     private final static int BACKGROUND_SCALE = 8;
 
-    private final Texture backgroundTexture = new Texture("misc/background.png");
+    private final Texture backgroundTexture = Mdx.graphics.newTexture(Mdx.files.internal("misc/background.png"));
 
     public void render(Graphics g) {
         for (int x = 0; x < BreakoutGame.gameWidth; x += backgroundTexture.getWidth() / BACKGROUND_SCALE)

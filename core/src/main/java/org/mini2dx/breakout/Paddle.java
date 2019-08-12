@@ -15,10 +15,11 @@
  ******************************************************************************/
 package org.mini2dx.breakout;
 
-import com.badlogic.gdx.graphics.Texture;
-import org.mini2Dx.core.engine.geom.CollisionBox;
-import org.mini2Dx.core.graphics.Graphics;
+import org.mini2Dx.core.Graphics;
+import org.mini2Dx.core.Mdx;
+import org.mini2Dx.core.collision.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
+import org.mini2Dx.core.graphics.Texture;
 
 class Paddle {
 
@@ -28,8 +29,8 @@ class Paddle {
     private final Sprite paddleSprite;
 
     public Paddle(){
-        Texture paddleTexture = new Texture(PADDLE_TEXTURE_IMAGE);
-        paddleSprite = new Sprite(paddleTexture);
+        Texture paddleTexture = Mdx.graphics.newTexture(Mdx.files.internal(PADDLE_TEXTURE_IMAGE));
+        paddleSprite = Mdx.graphics.newSprite(paddleTexture);
         collisionBox = new CollisionBox();
         collisionBox.setWidth(paddleSprite.getWidth());
         collisionBox.setHeight(paddleSprite.getHeight());
@@ -53,10 +54,6 @@ class Paddle {
             float newX = collisionBox.getX() + PADDLE_ACCELERATION * delta;
             collisionBox.setX(newX + collisionBox.getWidth() < BreakoutGame.gameWidth ? newX : BreakoutGame.gameWidth - collisionBox.getWidth());
         }
-    }
-
-    public void interpolate(float alpha) {
-        collisionBox.interpolate(null, alpha);
     }
 
     public void render(Graphics g) {

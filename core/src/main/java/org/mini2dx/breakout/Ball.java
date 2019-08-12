@@ -15,12 +15,14 @@
  ******************************************************************************/
 package org.mini2dx.breakout;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
-import org.mini2Dx.core.engine.geom.CollisionBox;
-import org.mini2Dx.core.graphics.Graphics;
+import org.mini2Dx.core.Mdx;
+import org.mini2Dx.core.audio.Sound;
+import org.mini2Dx.core.collision.CollisionBox;
+import org.mini2Dx.core.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
+import org.mini2Dx.core.graphics.Texture;
+
+import java.io.IOException;
 
 public class Ball {
     private final static String BALL_TEXTURE_IMAGE = "misc/ball.png";
@@ -30,19 +32,31 @@ public class Ball {
     private final Sprite ballSprite;
     private int verticalMovementSign = -1, horizontalMovementSign = 1;
 
-    private final static Sound wallCollisionSound = Gdx.audio.newSound(Gdx.files.internal("audio/wall.ogg"));
+    private static Sound wallCollisionSound;
     private final static float wallCollisionSoundVolume = 0.5f;
-    private final static Sound brickCollisionSound = Gdx.audio.newSound(Gdx.files.internal("audio/brick.ogg"));
+
+    private static Sound brickCollisionSound;
     private final static float brickCollisionSoundVolume = 0.5f;
-    private final static Sound paddleCollisionSound = Gdx.audio.newSound(Gdx.files.internal("audio/paddle.ogg"));
+
+    private static Sound paddleCollisionSound;
     private final static float paddleCollisionSoundVolume = 0.5f;
+
+    static {
+        try {
+            wallCollisionSound = Mdx.audio.newSound(Mdx.files.internal("audio/wall.ogg"));
+            brickCollisionSound = Mdx.audio.newSound(Mdx.files.internal("audio/brick.ogg"));
+            paddleCollisionSound = Mdx.audio.newSound(Mdx.files.internal("audio/paddle.ogg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private final float SPEEDUP_STEP = (Paddle.PADDLE_ACCELERATION - 50 - acceleration) / (BreakoutGame.gridSizeX * BreakoutGame.gridSizeY);
     //50 is a random number I chose as the minimum gap between the paddle speed and the ball speed
 
     public Ball(){
-        Texture ballTexture = new Texture(BALL_TEXTURE_IMAGE);
-        ballSprite = new Sprite(ballTexture);
+        Texture ballTexture = Mdx.graphics.newTexture(Mdx.files.internal(BALL_TEXTURE_IMAGE));
+        ballSprite = Mdx.graphics.newSprite(ballTexture);
         collisionBox = new CollisionBox();
         collisionBox.setWidth(ballSprite.getWidth());
         collisionBox.setHeight(ballSprite.getHeight());
@@ -80,10 +94,6 @@ public class Ball {
             if ((BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_BALL_SPEEDUP) != 0)
                 System.out.println(acceleration);
         }
-    }
-
-    public void interpolate(float alpha) {
-        collisionBox.interpolate(null, alpha);
     }
 
     public void render(Graphics g) {

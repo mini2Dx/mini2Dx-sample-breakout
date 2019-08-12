@@ -15,11 +15,11 @@
  ******************************************************************************/
 package org.mini2dx.breakout;
 
-
-import com.badlogic.gdx.graphics.Texture;
-import org.mini2Dx.core.engine.geom.CollisionBox;
-import org.mini2Dx.core.graphics.Graphics;
+import org.mini2Dx.core.Graphics;
+import org.mini2Dx.core.Mdx;
+import org.mini2Dx.core.collision.CollisionBox;
 import org.mini2Dx.core.graphics.Sprite;
+import org.mini2Dx.core.graphics.Texture;
 
 public class Brick {
 
@@ -49,8 +49,8 @@ public class Brick {
     public static final float height = 32f, width = 64f;
 
     Brick(Color color, float xPosition, float yPosition) {
-        Texture boxTexture = new Texture(color.toString());
-        boxSprite = new Sprite(boxTexture);
+        Texture boxTexture = Mdx.graphics.newTexture(Mdx.files.internal(color.toString()));
+        boxSprite = Mdx.graphics.newSprite(boxTexture);
         collisionBox = new CollisionBox();
         collisionBox.setHeight(boxSprite.getHeight());
         collisionBox.setWidth(boxSprite.getWidth());
@@ -64,10 +64,6 @@ public class Brick {
             setAlive(false);
             CollisionHandler.getInstance().killBrick();
         }
-    }
-
-    void interpolate(float alpha) {
-        collisionBox.interpolate(null, alpha);
     }
 
     void render(Graphics g) {

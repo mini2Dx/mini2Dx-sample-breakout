@@ -15,6 +15,9 @@
  ******************************************************************************/
 package org.mini2dx.breakout;
 
+import org.mini2Dx.core.collision.CollisionBox;
+import org.mini2Dx.core.geom.Rectangle;
+
 public class CollisionHandler {
     private static final CollisionHandler current;
 
@@ -47,7 +50,7 @@ public class CollisionHandler {
     }
 
     public static void update(){
-        current.isBallTouchingPaddle = current.ball.getCollisionBox().intersects(current.paddle.getCollisionBox());
+        current.isBallTouchingPaddle = current.ball.getCollisionBox().intersects((Rectangle) current.paddle.getCollisionBox());
 
         current.touchedBrick = null;
 

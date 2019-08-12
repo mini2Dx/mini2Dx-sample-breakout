@@ -15,13 +15,14 @@
  ******************************************************************************/
 package org.mini2dx.breakout;
 
-import com.badlogic.gdx.graphics.Texture;
-import org.mini2Dx.core.graphics.Graphics;
+import org.mini2Dx.core.Graphics;
+import org.mini2Dx.core.Mdx;
+import org.mini2Dx.core.graphics.Texture;
 
 public class LivesHandler {
     public static final int INITIAL_LIVES_NUM = 3;
     private final static String HEART_TEXTURE_IMAGE = "misc/heart.png";
-    private final static Texture HEART_TEXTURE = new Texture(HEART_TEXTURE_IMAGE);
+    private final static Texture HEART_TEXTURE = Mdx.graphics.newTexture(Mdx.files.internal(HEART_TEXTURE_IMAGE));
     private static LivesHandler current = new LivesHandler();
     private int lives = INITIAL_LIVES_NUM;
 

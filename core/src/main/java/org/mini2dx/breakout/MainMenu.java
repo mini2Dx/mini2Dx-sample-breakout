@@ -15,21 +15,20 @@
  ******************************************************************************/
 package org.mini2dx.breakout;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import org.mini2Dx.core.Graphics;
 import org.mini2Dx.core.Mdx;
-import org.mini2Dx.core.assets.FallbackFileHandleResolver;
+import org.mini2Dx.core.assets.AssetManager;
+import org.mini2Dx.core.exception.SerializationException;
+import org.mini2Dx.core.files.FallbackFileHandleResolver;
+import org.mini2Dx.core.files.FileHandleResolver;
+import org.mini2Dx.core.files.InternalFileHandleResolver;
+import org.mini2Dx.core.files.LocalFileHandleResolver;
 import org.mini2Dx.core.game.GameContainer;
-import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.viewport.FitViewport;
 import org.mini2Dx.core.graphics.viewport.Viewport;
 import org.mini2Dx.core.screen.BasicGameScreen;
 import org.mini2Dx.core.screen.ScreenManager;
 import org.mini2Dx.core.screen.transition.NullTransition;
-import org.mini2Dx.core.serialization.SerializationException;
 import org.mini2Dx.ui.UiContainer;
 import org.mini2Dx.ui.UiThemeLoader;
 import org.mini2Dx.ui.element.*;
@@ -37,6 +36,7 @@ import org.mini2Dx.ui.event.ActionEvent;
 import org.mini2Dx.ui.listener.ActionListener;
 import org.mini2Dx.ui.style.UiTheme;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,17 +52,18 @@ public class MainMenu extends BasicGameScreen {
 
     @Override
     public void initialise(GameContainer gc) {
-        FileHandleResolver fileHandleResolver = new FallbackFileHandleResolver(new ClasspathFileHandleResolver(), new InternalFileHandleResolver());
+        FileHandleResolver fileHandleResolver = new FallbackFileHandleResolver(new InternalFileHandleResolver(),
+                new LocalFileHandleResolver());
         assetManager = new AssetManager(fileHandleResolver);
-        assetManager.setLoader(UiTheme.class, new UiThemeLoader(fileHandleResolver));
+        assetManager.setAssetLoader(UiTheme.class, new UiThemeLoader(fileHandleResolver));
         assetManager.load(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class);
 
         viewport = new FitViewport(BreakoutGame.gameWidth, BreakoutGame.gameHeight);
         uiContainer = new UiContainer(gc, assetManager);
         Container mainMenuContainer = null;
         try {
-            mainMenuContainer = Mdx.xml.fromXml(Gdx.files.internal(UI_MAINMENU_LAYOUT_XML).reader(), Container.class);
-        } catch (SerializationException e) {
+            mainMenuContainer = Mdx.xml.fromXml(Mdx.files.internal(UI_MAINMENU_LAYOUT_XML).reader(), Container.class);
+        } catch (SerializationException | IOException e) {
             e.printStackTrace();
         }
         Objects.requireNonNull(mainMenuContainer);
@@ -77,8 +78,8 @@ public class MainMenu extends BasicGameScreen {
 
         Container temp_leaderboardContainer = null;
         try {
-            temp_leaderboardContainer = Mdx.xml.fromXml(Gdx.files.internal(UI_LEADERBOARD_LAYOUT_XML).reader(), Container.class);
-        } catch (SerializationException e) {
+            temp_leaderboardContainer = Mdx.xml.fromXml(Mdx.files.internal(UI_LEADERBOARD_LAYOUT_XML).reader(), Container.class);
+        } catch (SerializationException | IOException e) {
             e.printStackTrace();
         }
         final Container leaderboardContainer = Objects.requireNonNull(temp_leaderboardContainer);
@@ -159,7 +160,7 @@ public class MainMenu extends BasicGameScreen {
 
             @Override
             public void onActionEnd(ActionEvent event) {
-                Gdx.app.exit();
+                Mdx.platformUtils.exit(false);
             }
         });
 
@@ -176,7 +177,7 @@ public class MainMenu extends BasicGameScreen {
             }
         });
 
-
+        uiContainer.setViewport(viewport);
     }
 
     @Override
@@ -192,12 +193,7 @@ public class MainMenu extends BasicGameScreen {
             screenManager.enterGameScreen(screenToLoad, new NullTransition(), new NullTransition());
             screenToLoad = 0;
         }
-        Gdx.input.setInputProcessor(uiContainer);
-    }
-
-    @Override
-    public void interpolate(GameContainer gc, float alpha) {
-        uiContainer.interpolate(alpha);
+        Mdx.input.setInputProcessor(uiContainer);
     }
 
     @Override

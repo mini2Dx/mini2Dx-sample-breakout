@@ -15,23 +15,20 @@
  ******************************************************************************/
 package org.mini2dx.breakout;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.ClasspathFileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import org.mini2Dx.core.Mdx;
-import org.mini2Dx.core.assets.FallbackFileHandleResolver;
+import org.mini2Dx.core.assets.AssetManager;
+import org.mini2Dx.core.files.FallbackFileHandleResolver;
+import org.mini2Dx.core.files.FileHandleResolver;
+import org.mini2Dx.core.files.InternalFileHandleResolver;
+import org.mini2Dx.core.font.FontGlyphLayout;
 import org.mini2Dx.core.game.GameContainer;
-import org.mini2Dx.core.graphics.GlyphLayout;
-import org.mini2Dx.core.graphics.Graphics;
+import org.mini2Dx.core.Graphics;
 import org.mini2Dx.core.graphics.viewport.FitViewport;
 import org.mini2Dx.core.graphics.viewport.Viewport;
 import org.mini2Dx.core.screen.BasicGameScreen;
 import org.mini2Dx.core.screen.ScreenManager;
 import org.mini2Dx.core.screen.transition.NullTransition;
-import org.mini2Dx.core.serialization.SerializationException;
+import org.mini2Dx.core.exception.SerializationException;
 import org.mini2Dx.ui.UiContainer;
 import org.mini2Dx.ui.UiThemeLoader;
 import org.mini2Dx.ui.element.Button;
@@ -41,6 +38,7 @@ import org.mini2Dx.ui.event.ActionEvent;
 import org.mini2Dx.ui.listener.ActionListener;
 import org.mini2Dx.ui.style.UiTheme;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class BreakoutGame extends BasicGameScreen {
@@ -76,13 +74,13 @@ public class BreakoutGame extends BasicGameScreen {
         background = new Background();
         initialiseGame();
         //Create fallback file resolver so we can use the default mini2Dx-ui theme
-        FileHandleResolver fileHandleResolver = new FallbackFileHandleResolver(new ClasspathFileHandleResolver(), new InternalFileHandleResolver());
+        FileHandleResolver fileHandleResolver = new FallbackFileHandleResolver(new InternalFileHandleResolver());
 
         //Create asset manager for loading resources
         AssetManager assetManager = new AssetManager(fileHandleResolver);
 
         //Add mini2Dx-ui theme loader
-        assetManager.setLoader(UiTheme.class, new UiThemeLoader(fileHandleResolver));
+        assetManager.setAssetLoader(UiTheme.class, new UiThemeLoader(fileHandleResolver));
 
         //Load default theme
         assetManager.load(UiTheme.DEFAULT_THEME_FILENAME, UiTheme.class);
@@ -91,7 +89,7 @@ public class BreakoutGame extends BasicGameScreen {
 
     }
 
-    private final GlyphLayout glyphLayout = new GlyphLayout();
+    private final FontGlyphLayout glyphLayout = Mdx.fonts.defaultFont().newGlyphLayout();
 
     public void initialiseGame() {
         gameState = GameState.RUNNING;
@@ -145,12 +143,12 @@ public class BreakoutGame extends BasicGameScreen {
                 }
                 break;
             case ASK_NAME:
-                Gdx.input.setInputProcessor(uiContainer);
+                Mdx.input.setInputProcessor(uiContainer);
 
                 Container temp_askNameContainer = null;
                 try {
-                    temp_askNameContainer = Mdx.xml.fromXml(Gdx.files.internal(UI_ASK_NAME_LAYOUT_XML).reader(), Container.class);
-                } catch (SerializationException e) {
+                    temp_askNameContainer = Mdx.xml.fromXml(Mdx.files.internal(UI_ASK_NAME_LAYOUT_XML).reader(), Container.class);
+                } catch (SerializationException | IOException e) {
                     e.printStackTrace();
                 }
                 final Container askNameContainer = Objects.requireNonNull(temp_askNameContainer);
@@ -201,19 +199,6 @@ public class BreakoutGame extends BasicGameScreen {
     }
 
     @Override
-    public void interpolate(GameContainer gameContainer, float alpha) {
-        if (gameState == GameState.WAITING_FOR_NAME) {
-            uiContainer.interpolate(alpha);
-        } else {
-            paddle.interpolate(alpha);
-            ball.interpolate(alpha);
-            for (int i = 0; i < gridSizeX; i++)
-                for (int j = 0; j < gridSizeY; j++)
-                    bricks[i][j].interpolate(alpha);
-        }
-    }
-
-    @Override
     public void render(GameContainer gameContainer, Graphics g) {
         viewport.apply(g);
         background.render(g);
@@ -250,9 +235,9 @@ public class BreakoutGame extends BasicGameScreen {
     }
 
     public void drawCenterAlignedString(Graphics g, String s) {
-        glyphLayout.setText((BitmapFont) g.getFont(), s);
-        int renderX = Math.round((gameWidth / 2f) - (glyphLayout.width / 2f));
-        int renderY = Math.round((gameHeight / 2f) - (glyphLayout.height / 2f));
+        glyphLayout.setText(s);
+        int renderX = Math.round((gameWidth / 2f) - (glyphLayout.getWidth() / 2f));
+        int renderY = Math.round((gameHeight / 2f) - (glyphLayout.getHeight() / 2f));
         g.drawString(s, renderX, renderY);
     }
 }

@@ -15,8 +15,7 @@
  ******************************************************************************/
 package org.mini2dx.breakout;
 
-
-import org.mini2Dx.core.graphics.Graphics;
+import org.mini2Dx.core.Graphics;
 
 public class ScoreCounter {
     private static ScoreCounter current;

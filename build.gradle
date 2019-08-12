@@ -19,7 +19,7 @@ allprojects {
     version = '1.0.0'
     ext {
         appName = 'Breakout'
-        mini2DxVersion = '1.9.4'
+        mini2DxVersion = '2.0.0-SNAPSHOT'
         gdxVersion = '1.9.8'
         roboVMVersion = '2.3.6'
         minibusVersion = '1.3.0'
@@ -44,9 +44,7 @@ project(":core") {
 
     dependencies {
         compile "org.mini2Dx:mini2Dx-core:$mini2DxVersion"
-        compile "org.mini2Dx:mini2Dx-artemis-odb:$mini2DxVersion"
         compile "org.mini2Dx:mini2Dx-ui:$mini2DxVersion"
-        compile "org.mini2Dx:mini2Dx-core:$minibusVersion"
     }
 }
 
@@ -59,7 +57,7 @@ project(":desktop") {
 
     dependencies {
         compile project(":core")
-        compile "org.mini2Dx:mini2Dx-desktop:$mini2DxVersion"
+        compile "org.mini2Dx:mini2Dx-libgdx-desktop:$mini2DxVersion"
     }
     parcl {
         exe {
