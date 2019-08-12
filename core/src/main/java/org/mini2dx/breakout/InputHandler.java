@@ -14,8 +14,8 @@
  * limitations under the License.
  ******************************************************************************/
 package org.mini2dx.breakout;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import org.mini2Dx.core.Mdx;
+import org.mini2Dx.gdx.Input;
 
 class InputHandler {
     private boolean left, right, restart, quit, any;
@@ -30,11 +30,11 @@ class InputHandler {
     }
 
     public static void update(){
-        current.left = Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT) || Gdx.input.isKeyPressed(Input.Keys.A);
-        current.right = Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D);
-        current.restart = Gdx.input.isKeyPressed(Input.Keys.R) || Gdx.input.isKeyPressed(Input.Keys.ENTER);
-        current.quit = Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.Q);
-        current.any = Gdx.input.isKeyPressed(Input.Keys.ANY_KEY);
+        current.left = Mdx.input.isKeyDown(Input.Keys.LEFT) || Mdx.input.isKeyDown(Input.Keys.DPAD_LEFT) || Mdx.input.isKeyDown(Input.Keys.A);
+        current.right = Mdx.input.isKeyDown(Input.Keys.RIGHT) || Mdx.input.isKeyDown(Input.Keys.DPAD_RIGHT) || Mdx.input.isKeyDown(Input.Keys.D);
+        current.restart = Mdx.input.isKeyDown(Input.Keys.R) || Mdx.input.isKeyDown(Input.Keys.ENTER);
+        current.quit = Mdx.input.isKeyDown(Input.Keys.ESCAPE) || Mdx.input.isKeyDown(Input.Keys.Q);
+        current.any = Mdx.input.isKeyDown(Input.Keys.ANY_KEY);
         if ((BreakoutGame.DEBUG_MODE & BreakoutGame.DEBUG_INPUT) != 0) {
             System.out.print(current.left ? 'L' : 'l');
             System.out.print(current.right ? 'R' : 'r');

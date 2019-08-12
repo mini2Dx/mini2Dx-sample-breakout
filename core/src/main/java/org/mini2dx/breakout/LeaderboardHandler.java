@@ -17,7 +17,7 @@
 package org.mini2dx.breakout;
 
 import org.mini2Dx.core.Mdx;
-import org.mini2Dx.core.playerdata.PlayerDataException;
+import org.mini2Dx.core.exception.PlayerDataException;
 import org.mini2Dx.core.serialization.annotation.Field;
 
 import java.util.Comparator;
