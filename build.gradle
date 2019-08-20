@@ -19,7 +19,7 @@ allprojects {
     version = '1.0.0'
     ext {
         appName = 'Breakout'
-        mini2DxVersion = '2.0.0-SNAPSHOT'
+        mini2DxVersion = '2.0.0-alpha.3'
         gdxVersion = '1.9.8'
         roboVMVersion = '2.3.6'
         minibusVersion = '1.3.0'
@@ -35,6 +35,7 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
     }
 }
 
